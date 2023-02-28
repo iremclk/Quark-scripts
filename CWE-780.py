@@ -1,0 +1,17 @@
+import globVariable
+from quark.script import Rule, runQuarkAnalysis
+
+input = globVariable.applicationName
+SAMPLE_PATH = input
+RULE_PATH = "useOfCryptographicAlgo.json"
+
+ruleInstance = Rule(RULE_PATH)
+quarkResult = runQuarkAnalysis(SAMPLE_PATH, ruleInstance)
+
+for useCryptographicAlgo in quarkResult.behaviorOccurList:
+
+    methodCaller = useCryptographicAlgo.methodCaller
+
+    if useCryptographicAlgo.hasString("RSA") and \
+        not useCryptographicAlgo.hasString("OAEP"):
+        print(f"CWE-780 is detected in method, {methodCaller.fullName}")
